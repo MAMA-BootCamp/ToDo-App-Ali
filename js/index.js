@@ -1,10 +1,8 @@
-// ?Declarations
+// ?Declarations & Events
 const tasksContainer = document.querySelector('.container')
 const input = document.querySelector('.input')
 const addBtn = document.querySelector('.add')
 let tasksArray = []
-
-// ?Events
 addBtn.addEventListener('click', addTask)
 document.addEventListener('DOMContentLoaded', onReload)
 
@@ -15,43 +13,48 @@ function buildTaskDom(data) {
     let taskText = document.createElement('p')
     taskText.classList.add('taskText')
     taskText.textContent = data
-
-    let remove = document.createElement('button')
-    remove.classList.add('remove')
-    remove.textContent = 'remove'
-
-    let edit = document.createElement('button')
-    edit.classList.add('edit')
-    edit.textContent = 'edit'
-
-    let check = document.createElement('button')
-    check.classList.add('check')
-    check.textContent = 'check'
+    let removeBtn = document.createElement('button')
+    removeBtn.classList.add('remove')
+    removeBtn.textContent = 'remove'
+    let editBtn = document.createElement('button')
+    editBtn.classList.add('edit')
+    editBtn.textContent = 'edit'
+    let checkBtn = document.createElement('button')
+    checkBtn.classList.add('check')
+    checkBtn.textContent = 'check'
 
     tasksContainer.appendChild(task)
     task.appendChild(taskText)
-    task.appendChild(remove)
-    task.appendChild(edit)
-    task.appendChild(check)
+    task.appendChild(removeBtn)
+    task.appendChild(editBtn)
+    task.appendChild(checkBtn)
+
+
+    // !-------------Remove FUNCTION:-------------
+    removeBtn.addEventListener('click', removeTask)
+    function removeTask(){
+        task.remove()
+        tasksArray = JSON.parse(localStorage.getItem('tasksKey'))
+        tasksArray.splice(tasksArray.indexOf(data),1)
+        localStorage.setItem('tasksKey', JSON.stringify(tasksArray))
+    }
+
+        // !-------------Edit FUNCTION:-------------
+
+
 
 }
 
 // !-------------AddTask FUNCTION:-------------
 function addTask(e){
-    
     e.preventDefault()
-    if(input.value !== ''){
-        buildTaskDom(input.value)
+    if(input.value === ''){
+        return;
     }
+    buildTaskDom(input.value)
+    
     tasksArray.push(input.value)
     localStorage.setItem('tasksKey', JSON.stringify(tasksArray))
-
-
-
-    //!-------------Remove FUNCTION:-------------
-
-
-    
     input.value = ''
 } // end addTask Function.
 
