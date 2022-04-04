@@ -1,18 +1,20 @@
-// !Declarations
+// ?Declarations
 const tasksContainer = document.querySelector('.container')
 const input = document.querySelector('.input')
 const addBtn = document.querySelector('.add')
 let tasksArray = []
-// !Events
+
+// ?Events
 addBtn.addEventListener('click', addTask)
+document.addEventListener('DOMContentLoaded', onReload)
 
 
-function buildTaskDom(inputData) {
+function buildTaskDom(data) {
     let task = document.createElement('div')
     task.classList.add('task')
     let taskText = document.createElement('p')
     taskText.classList.add('taskText')
-    taskText.textContent = inputData
+    taskText.textContent = data
 
     let remove = document.createElement('button')
     remove.classList.add('remove')
@@ -34,13 +36,33 @@ function buildTaskDom(inputData) {
 
 }
 
-// AddTask FUNCTION:
-
+// !-------------AddTask FUNCTION:-------------
 function addTask(e){
     
     e.preventDefault()
     if(input.value !== ''){
         buildTaskDom(input.value)
     }
- 
+    tasksArray.push(input.value)
+    localStorage.setItem('tasksKey', JSON.stringify(tasksArray))
+
+
+
+    //!-------------Remove FUNCTION:-------------
+
+
+    
+    input.value = ''
+} // end addTask Function.
+
+
+// !-------------OnReload FUNCTION:-------------
+function onReload(){
+if(localStorage.getItem('tasksKey')){
+    tasksArray = JSON.parse(localStorage.getItem('tasksKey'))
 }
+tasksArray.forEach((localValue)=>{
+    buildTaskDom(localValue)
+
+})
+} // end onReload function.
