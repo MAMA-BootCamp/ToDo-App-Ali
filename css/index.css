@@ -1,0 +1,54 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: var(--body-color)
+}
+
+:root {
+    --body-color: rgb(231, 218, 218);
+    --main-color: #f0f2fa;
+    --heading-color: #1e202a;
+    --text-color: #63687e;
+    --border-color: gold
+  }
+  
+  .dark {
+    --body-color: rgb(48, 41, 41);
+    --main-color: #f0f2fa;
+    --heading-color: #1e202a;
+    --text-color: #63687e;
+    --border-color: gold
+  }
+
+  main {
+      width: 90%;
+      margin: 100px auto;
+      padding-top: 30px;
+      background-color: var(--main-color) ;
+
+    }
+
+
+
+  form {
+    /* margin-top: 30px; */
+
+
+  }
+
+
+
+
+
+
+  .add{
+
+  }
+
+  .container{
+
+  }
