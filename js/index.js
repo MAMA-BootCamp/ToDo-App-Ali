@@ -42,14 +42,12 @@ function buildTaskDom(data) {
   const removeBtn = document.createElement("button");
   removeBtn.classList.add("remove");
   removeBtn.classList.add("btn");
-  // removeBtn.classList.add("fa-solid fa-trash");
   removeBtn.textContent = "remove";
   task.appendChild(removeBtn);
   //edit A-c
   const editBtn = document.createElement("button");
   editBtn.classList.add("edit");
   editBtn.classList.add("btn");
-  // removeBtn.classList.add("fa-solid fa-pen-to-square");
   editBtn.textContent = "edit";
   task.appendChild(editBtn);
   //check A-d
