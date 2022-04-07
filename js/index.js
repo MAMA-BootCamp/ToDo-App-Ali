@@ -1,5 +1,5 @@
 'use strict';
-// ?Declarations & Events
+// ?Declarations:
 const tasksContainer = document.querySelector(".container");
 const input = document.querySelector(".input");
 const addBtn = document.querySelector(".add");
@@ -10,10 +10,9 @@ let localData = localStorage.getItem("tasksKey");
 let localCheck = localStorage.getItem("checkKey")
 let editStatus = "off";
 let checkStatus = "off";
-addBtn.addEventListener("click", addTask);
-document.addEventListener("DOMContentLoaded", onReload);
 
 // !-------------AddTask FUNCTION:-------------
+addBtn.addEventListener("click", addTask);
 function addTask(e) {
   e.preventDefault();
   if (input.value === "") {
@@ -21,36 +20,42 @@ function addTask(e) {
   }
   buildTaskDom(input.value);
   tasksArray.push(input.value);
+  // push default off value to checkArray, so we compare the indexes later.
   checkArray.push("off");
-  localStorage.setItem("checkKey", JSON.stringify(checkArray));
   saveToLocal();
   input.value = "";
 } // end Add.
 
 // !-------------BuildTaskDom FUNCTION:-------------
+// build basic task dom elements, with all their functions next to them.
 function buildTaskDom(data) {
-  //taskParent
+  //taskParent A
   const task = document.createElement("div");
   task.classList.add("task");
   tasksContainer.appendChild(task);
-  //taskText
+  //taskText A-a
   const taskText = document.createElement("p");
   taskText.classList.add("taskText");
   task.appendChild(taskText);
   taskText.textContent = data;
-  //remove
+  //remove A-b
   const removeBtn = document.createElement("button");
   removeBtn.classList.add("remove");
+  removeBtn.classList.add("btn");
+  // removeBtn.classList.add("fa-solid fa-trash");
   removeBtn.textContent = "remove";
   task.appendChild(removeBtn);
-  //edit
+  //edit A-c
   const editBtn = document.createElement("button");
   editBtn.classList.add("edit");
+  editBtn.classList.add("btn");
+  // removeBtn.classList.add("fa-solid fa-pen-to-square");
   editBtn.textContent = "edit";
   task.appendChild(editBtn);
-  //check
+  //check A-d
   const checkBtn = document.createElement("button");
   checkBtn.classList.add("check");
+  checkBtn.classList.add("btn");
   checkBtn.textContent = "check";
   task.appendChild(checkBtn);
 
@@ -59,86 +64,93 @@ function buildTaskDom(data) {
   function removeTask() {
     // remove task
     task.remove();
-    // remove task.input from local storage
+    // remove task value from local storage
     tasksArray = JSON.parse(localStorage.getItem("tasksKey"));
     tasksArray.splice(tasksArray.indexOf(data), 1);
     saveToLocal();
-    // remove checkedInput from local storage 
+    // remove check value from local storage 
     checkArray = JSON.parse(localStorage.getItem("checkKey"));
     let tasksIndex = tasksArray.indexOf(taskText.textContent);
     checkArray.splice(tasksIndex, 1);
-    localStorage.setItem("checkKey", JSON.stringify(checkArray));
-  }
+    saveToLocal();
+    }
 
   // !-------------Edit FUNCTION:-------------
   editBtn.addEventListener("click", editTask);
   function editTask() {
-    if (editStatus === "off") {
+    
+    if (editStatus === "off") { // 1st click
       input.value = taskText.textContent;
       editBtn.textContent = "save";
       editStatus = "on";
-    } else {
+    } else { // 2nd click
       tasksArray = JSON.parse(localStorage.getItem("tasksKey"));
+      // store old value
       let tasksIndex = tasksArray.indexOf(taskText.textContent);
+      // submit new value
       taskText.textContent = input.value;
+      // replace indexOf(old) with new
       tasksArray.splice(tasksIndex, 1, input.value);
-      saveToLocal();
       input.value = "";
       editBtn.textContent = "edit";
       editStatus = "off";
+      saveToLocal();
     }
-  } // end Edit
+  } 
 
   // !-------------Check FUNCTION:-------------
   checkBtn.addEventListener("click", CheckTask);
   function CheckTask() {
-    if (checkStatus === "off") {
+    if (checkStatus === "off") { // 1st click
       taskText.style.textDecoration = "line-through";
       checkBtn.textContent = "uncheck";
-      // taskText.textContent = input.value;
-      tasksArray = JSON.parse(localStorage.getItem("tasksKey"));
+      // replace the default off to on
       checkArray = JSON.parse(localStorage.getItem("checkKey"));
       let tasksIndex = tasksArray.indexOf(taskText.textContent);
       checkArray.splice(tasksIndex, 1, 'on');
-      localStorage.setItem("checkKey", JSON.stringify(checkArray));
       checkStatus = "on";
-    } else {
+      saveToLocal();
+    } else { // 2nd click
       taskText.style.textDecoration = "none";
       checkBtn.textContent = "check";
-      tasksArray = JSON.parse(localStorage.getItem("tasksKey"));
+      // replace on back to off
       checkArray = JSON.parse(localStorage.getItem("checkKey"));
       let tasksIndex = tasksArray.indexOf(taskText.textContent);
       checkArray.splice(tasksIndex, 1, 'off');
-      localStorage.setItem("checkKey", JSON.stringify(checkArray));
       checkStatus = "off";
+      saveToLocal();
     }
-    
-  } // end check
-} //end dom
+  } 
+
+} // end DOM
 
 // !-------------saveToLocal FUNCTION:-------------
 function saveToLocal() {
   localStorage.setItem("tasksKey", JSON.stringify(tasksArray));
+  localStorage.setItem("checkKey", JSON.stringify(checkArray));
+
 }
 
 // !-------------OnReload FUNCTION:-------------
+document.addEventListener("DOMContentLoaded", onReload);
 function onReload() {
-  if (localData && localCheck ) {
+  // if there are already the 2 arrays in local, bring them.
+  if (localData && localCheck ){
     tasksArray = JSON.parse(localData);
     checkArray = JSON.parse(localCheck);
   }
-  tasksArray.forEach((localValue, i) => {
-    buildTaskDom(localValue);
-  }); // end forEach
 
-  // give check style to all already decorated tasks
+  tasksArray.forEach((localValue) => {
+    buildTaskDom(localValue);
+  }); 
+
+  // give check style to all already decorated browser tasks.
   const taskText = document.querySelectorAll('.taskText')
   const checkBtn = document.querySelectorAll('.check')
-
   for (let i = 0; i < checkArray.length; i++) {
     if (checkArray[i] === 'on') {
       taskText[i].style.textDecoration = "line-through";
       checkBtn[i].textContent = 'uncheck'
     } 
-  } // end forloop check
-} // end onReload function.
+  } 
+} 
