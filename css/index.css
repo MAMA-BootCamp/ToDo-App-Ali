@@ -75,14 +75,21 @@ form{
 .add{
   font-size: 1.8rem;
   height: 3rem;
-  width: 25%;
+  width: 15%;
   border-radius: .5rem;
 }
 .input{
   border-radius: .5rem;
   height: 3rem;
-  width: 70%;
+  width: 60%;
 
+}
+
+.removeAll{
+  font-size: 1.8rem;
+  height: 3rem;
+  width: 15%;
+  border-radius: .5rem;
 }
 .toggle{
   font-size: 1.5rem;

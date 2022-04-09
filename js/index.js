@@ -3,7 +3,7 @@
 const tasksContainer = document.querySelector(".container");
 const input = document.querySelector(".input");
 const addBtn = document.querySelector(".add");
-const saveBtn = document.querySelector(".save");
+const removeAllBtn = document.querySelector('.removeAll')
 let tasksArray = [];
 let checkArray = [];
 let localData = localStorage.getItem("tasksKey");
@@ -87,7 +87,7 @@ function buildTaskDom(data) {
       let tasksIndex = tasksArray.indexOf(taskText.textContent);
       // submit new value
       taskText.textContent = input.value;
-      // replace indexOf(old) with new
+      // replace old input 'indexOf(old)' with new
       tasksArray.splice(tasksIndex, 1, input.value);
       input.value = "";
       editBtn.textContent = "edit";
@@ -119,14 +119,24 @@ function buildTaskDom(data) {
       saveToLocal();
     }
   } 
-
 } // end DOM
+
+// !-------------RemoveAll FUNCTION:-------------
+removeAllBtn.addEventListener('click', removeAllTasks)
+function removeAllTasks (e){
+  e.preventDefault()
+  const task = document.querySelectorAll('.task')
+  for(let i = 0; i < task.length; i++){
+    task[i].remove()
+  }
+  localStorage.removeItem('tasksKey')
+  localStorage.removeItem('checkKey')
+}
 
 // !-------------saveToLocal FUNCTION:-------------
 function saveToLocal() {
   localStorage.setItem("tasksKey", JSON.stringify(tasksArray));
   localStorage.setItem("checkKey", JSON.stringify(checkArray));
-
 }
 
 // !-------------OnReload FUNCTION:-------------
@@ -147,8 +157,9 @@ function onReload() {
   const checkBtn = document.querySelectorAll('.check')
   for (let i = 0; i < checkArray.length; i++) {
     if (checkArray[i] === 'on') {
-      taskText[i].style.textDecoration = "line-through";
+      taskText[i].style.textDecoration = 'line-through';
       checkBtn[i].textContent = 'uncheck'
+      checkStatus = "on";
     } 
   } 
 } 
